@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Orders</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/js/all.min.js" crossorigin="anonymous"></script>
+</head>
+<body class="bg-[#002d6e] p-6">
+<!-- Navbar -->
+<header class="bg-[#002d6e] text-white py-4 shadow-lg fade-in">
+    <div class="container mx-auto flex justify-between items-center px-6">
+        
+        <!-- Logo -->
+        <a href="/">
+            <img src="../imageAssets/Screenshot 2025-01-12 103506.png" alt="Website Logo" class="h-12 transform transition duration-500 hover:scale-110">
+        </a>
+        <a href="#" class="text-2xl font-bold">FURNICS</a>
+
+        <nav class="flex space-x-6">
+            <a href="/" class="nav-link">Home</a>
+            <a href="/services" class="nav-link">Services</a>
+            <a href="/contact" class="nav-link">Contact</a>
+        </nav>
+        <a href="/userProfile" class="text-white text-xl hover:text-[#ff8000] transition"><i class="fas fa-user"></i></a>
+    </div>
+</header>
+
+
+    <div class="max-w-4xl mx-auto bg-white p-6 rounded-lg shadow-lg">
+        <h2 class="text-2xl font-bold mb-4 text-[#002d6e]">My Orders</h2>
+        <div id="orderHistory"></div>
+    </div>
+
+    <script>
+        function loadOrders() {
+            const sessionData = JSON.parse(localStorage.getItem("sessionUser"));
+            if (!sessionData) {
+                alert("You need to log in first!");
+                window.location.href = "/loginSignUP";
+                return;
+            }
+
+            let orders = JSON.parse(localStorage.getItem(`orders_${sessionData.userId}`)) || [];
+            if (orders.length === 0) {
+                document.getElementById("orderHistory").innerHTML = "<p>No orders found.</p>";
+                return;
+            }
+
+            let orderDetails = orders.map((order, index) => `
+                <div class="p-4 border-b">
+                    <h3 class="text-lg font-semibold">Order #${index + 1}</h3>
+                    <p><strong>Payment Method:</strong> ${order.paymentMethod}</p>
+                    <!-- <p><strong>Total Amount:</strong> ₹${order.totalAmount}</p> -->
+                    <p><strong>Total Amount:</strong> ${order.totalAmount}</p>
+                    <p><strong>Address:</strong> ${order.address}, ${order.pincode}</p>
+                    <div class="mt-2">
+                        ${order.cart.map(item => `
+                            <p>${item.name} (Size: ${item.variant}) - ₹${item.price} x ${item.quantity}</p>
+                        `).join("")}
+                    </div>
+                </div>
+            `).join("");
+
+            document.getElementById("orderHistory").innerHTML = orderDetails;
+        }
+
+        window.onload = loadOrders;
+    </script>
+
+</body>
+</html>

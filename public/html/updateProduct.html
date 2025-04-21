@@ -1,0 +1,201 @@
+
+
+
+
+
+
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Update Product</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="p-5 bg-gray-100">
+    <h1 class="text-2xl font-bold mb-4">Update Products</h1>
+    <table class="table-auto w-full bg-white shadow-md rounded-lg overflow-hidden">
+        <thead>
+            <tr class="bg-gray-200">
+                <th class="px-4 py-2">ID</th>
+                <th class="px-4 py-2">Name</th>
+                <th class="px-4 py-2">Images</th>
+                <th class="px-4 py-2">Features</th>
+                <th class="px-4 py-2">Variants</th>
+                <th class="px-4 py-2">Actions</th>
+            </tr>
+        </thead>
+        <tbody id="productTable"></tbody>
+    </table>
+
+    <script>
+        async function fetchProducts() {
+            try {
+                const response = await fetch('/products/all');
+                const products = await response.json();
+                const tableBody = document.getElementById('productTable');
+                tableBody.innerHTML = '';
+
+                products.forEach(product => {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td class="border px-4 py-2">${product.productId}</td>
+                        <td class="border px-4 py-2">
+                            <input type="text" value="${product.name}" id="name-${product._id}" class="border p-1 w-full">
+                        </td>
+                        <td class="border px-4 py-2">
+                            <div id="img-container-${product._id}">
+                                ${product.images.map((img, i) => `
+                                    <div class="flex items-center gap-2 mb-1">
+                                        <input type="text" value="${img}" class="border p-1 w-full img-${product._id}">
+                                        <button onclick="deleteImage('${product._id}', ${i})" class="text-red-500">X</button>
+                                    </div>
+                                `).join('')}
+                            </div>
+                            <button onclick="addImage('${product._id}')" class="bg-blue-500 text-white px-2 py-1 mt-1">Add Image</button>
+                        </td>
+                        <td class="border px-4 py-2">
+    <div id="feat-container-${product._id}">
+        ${product.features.map((feature, i) => `
+            <div class="flex items-center gap-2 mb-1">
+                <input type="text" value="${feature}" id="feat-${product._id}-${i}" class="border p-1">
+                <button onclick="deleteFeature('${product._id}', ${i})" class="text-red-500">X</button>
+            </div>
+        `).join('')}
+    </div>
+    <button onclick="addFeature('${product._id}')" class="bg-green-500 text-white px-2 py-1 mt-1">Add Feature</button>
+</td>
+                        <td class="border px-4 py-2">
+                            <div id="variants-${product._id}">
+                                ${product.variants.map((variant, i) => `
+                                    <div class="flex items-center gap-2 mb-1" data-variant-id="${product._id}">
+                                        <input type="text" value="${variant.size}" class="size border p-1 w-16" placeholder="Size">
+                                        <input type="number" value="${variant.price}" class="price border p-1 w-16" placeholder="Price">
+                                        <input type="number" value="${variant.quantity}" class="quantity border p-1 w-16" placeholder="Qty">
+                                        <button onclick="deleteVariant('${product._id}', ${i})" class="text-red-500">X</button>
+                                    </div>
+                                `).join('')}
+                            </div>
+                            <button onclick="addVariant('${product._id}')" class="bg-purple-500 text-white px-2 py-1">Add Variant</button>
+                        </td>
+                        <td class="border px-4 py-2">
+                            <button onclick="updateProduct('${product._id}')" class="bg-yellow-500 text-white px-2 py-1">Update</button>
+                            <button onclick="deleteProduct('${product._id}')" class="bg-red-500 text-white px-2 py-1">Delete</button>
+                        </td>
+                    `;
+                    tableBody.appendChild(row);
+                });
+            } catch (error) {
+                console.error('Error fetching products:', error);
+            }
+        }
+
+        async function updateProduct(id) {
+    const name = document.getElementById(`name-${id}`).value;
+
+    // Collect images
+    const imageInputs = document.querySelectorAll(`#img-container-${id} input`);
+    const images = Array.from(imageInputs).map(input => input.value.trim()).filter(img => img !== '');
+
+    // Collect features
+    const featureInputs = document.querySelectorAll(`[id^="feat-${id}-"]`);
+    const features = Array.from(featureInputs).map(input => input.value.trim()).filter(feat => feat !== '');
+
+    // Collect variants
+    const variantRows = document.querySelectorAll(`#variants-${id} [data-variant-id="${id}"]`);
+    const variants = Array.from(variantRows).map(row => ({
+        size: row.querySelector('.size').value.trim(),
+        price: parseFloat(row.querySelector('.price').value) || 0,
+        quantity: parseInt(row.querySelector('.quantity').value) || 0,
+    })).filter(v => v.size !== ''); // Filter out empty variants
+
+    const updatedProduct = { name, images, features, variants };
+
+    const response = await fetch(`/update-product/${id}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(updatedProduct),
+    });
+
+    const result = await response.json();
+    if (response.ok) {
+        alert('Product updated successfully!');
+        fetchProducts();
+    } else {
+        alert('Error updating product: ' + result.message);
+    }
+}
+
+        async function deleteProduct(id) {
+            if (!confirm('Are you sure?')) return;
+            await fetch(`/delete-product/${id}`, { method: 'DELETE' });
+            alert('Product deleted');
+            fetchProducts();
+        }
+
+        function addImage(id) {
+            const container = document.querySelector(`#img-container-${id}`);
+            const newInput = document.createElement("input");
+            newInput.type = "text";
+            newInput.classList.add("border", "p-1", "mb-1", "img-" + id);
+            newInput.placeholder = "Image URL";
+            container.appendChild(newInput);
+        }
+
+        // function addFeature(id) {
+        //     const container = document.querySelector(`#feat-container-${id}`);
+        //     const newInput = document.createElement("input");
+        //     newInput.type = "text";
+        //     newInput.classList.add("border", "p-1", "mb-1", "feat-" + id);
+        //     newInput.placeholder = "Feature";
+        //     container.appendChild(newInput);
+        // }
+        function addFeature(id) {
+    const container = document.querySelector(`#feat-container-${id}`);
+    const newFeatureDiv = document.createElement("div");
+    newFeatureDiv.classList.add("flex", "items-center", "gap-2", "mb-1");
+    newFeatureDiv.innerHTML = `
+        <input type="text" class="border p-1" placeholder="Feature">
+        <button onclick="this.parentNode.remove()" class="text-red-500">X</button>
+    `;
+    container.appendChild(newFeatureDiv);
+}
+
+        function addVariant(id) {
+            const container = document.querySelector(`#variants-${id}`);
+            const newVariant = document.createElement("div");
+            newVariant.setAttribute("data-variant-id", id);
+            newVariant.classList.add("mb-1");
+            newVariant.innerHTML = `
+                <input type="text" class="size border p-1" placeholder="Size">
+                <input type="number" class="price border p-1" placeholder="Price">
+                <input type="number" class="quantity border p-1" placeholder="Qty">
+                <button onclick="this.parentNode.remove()" class="text-red-500">X</button>
+            `;
+            container.appendChild(newVariant);
+        }
+        function deleteImage(productId, index) {
+    const imageDiv = document.querySelector(`#img-container-${productId}`).children[index];
+    imageDiv.remove();
+}
+
+function deleteFeature(productId, index) {
+    const featureInput = document.querySelector(`#feat-${productId}-${index}`);
+    featureInput.nextElementSibling.remove(); // Remove delete button
+    featureInput.remove(); // Remove input
+}
+
+function deleteVariant(productId, index) {
+    const variantDiv = document.querySelector(`#variants-${productId}`).children[index];
+    variantDiv.remove();
+}
+        // window.onload = fetchProducts;
+    </script>
+</body>
+
+</html>

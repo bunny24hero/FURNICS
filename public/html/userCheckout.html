@@ -1,0 +1,119 @@
+
+
+
+
+
+
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Details</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-[#002d6e] p-6">
+    <div class="container mx-auto flex justify-center">
+        <img src="../imageAssets/Screenshot 2025-01-12 103506.png" alt="FURNICS Logo" class="h-40">
+    </div>
+    <div class="max-w-4xl mx-auto bg-white p-6 rounded-lg shadow-lg">
+        <h2 class="text-2xl font-bold mb-4 text-[#002d6e]">Add Your Details</h2>
+
+        <!-- Product List -->
+        <div id="checkoutItems" class="space-y-4"></div>
+        <p class="text-lg font-semibold text-[#002d6e]">Grand Total: <span id="checkoutTotal">₹0</span></p>
+
+        <!-- User Details Form -->
+        <form id="userDetailsForm" class="mt-6">
+            <div class="mb-4">
+                <label class="block text-[#002d6e] font-bold">Name:</label>
+                <input type="text" id="name" class="w-full p-2 border rounded-lg" required>
+            </div>
+
+            <div class="mb-4">
+                <label class="block text-[#002d6e] font-bold">Address:</label>
+                <textarea id="address" class="w-full p-2 border rounded-lg" required></textarea>
+            </div>
+
+            <div class="mb-4">
+                <label class="block text-[#002d6e] font-bold">Pincode:</label>
+                <input type="text" id="pincode" class="w-full p-2 border rounded-lg" pattern="\\d{6}" title="Enter a valid 6-digit pincode" required>
+            </div>
+
+            <div class="mb-4">
+                <label class="block text-[#002d6e] font-bold">Mobile Number:</label>
+                <input type="text" id="mobile" class="w-full p-2 border rounded-lg" pattern="\\d{10}" title="Enter a valid 10-digit mobile number" required>
+            </div>
+
+            <!-- Pay Button -->
+            <button type="button" id="payButton"
+                class="bg-[#ff8000] text-white px-6 py-2 rounded-lg text-lg font-bold w-full">
+                Pay
+            </button>
+        </form>
+    </div>
+
+    <script>
+        function getCart() {
+            return JSON.parse(localStorage.getItem("cart")) || [];
+        }
+
+        function renderCheckout() {
+            const cart = getCart();
+            const checkoutContainer = document.getElementById("checkoutItems");
+            const checkoutTotal = document.getElementById("checkoutTotal");
+
+            if (cart.length === 0) {
+                checkoutContainer.innerHTML = "<p>Your cart is empty.</p>";
+                checkoutTotal.textContent = "₹0";
+                return;
+            }
+
+            checkoutContainer.innerHTML = "";
+            let totalAmount = 0;
+
+            cart.forEach(item => {
+                let itemTotal = item.price * item.quantity;
+                totalAmount += itemTotal;
+
+                const checkoutItem = document.createElement("div");
+                checkoutItem.classList.add("flex", "justify-between", "bg-gray-100", "p-4", "rounded-lg", "mb-2");
+
+                checkoutItem.innerHTML = `
+                    <img src="${item.image}" class="w-20 h-20 rounded">
+                    <div class="flex-1 ml-4">
+                        <h2 class="text-lg font-bold">${item.name}</h2>
+                        <p>Size: ${item.variant}</p>
+                        <p>Price: ₹${item.price}</p>
+                        <p>Quantity: ${item.quantity}</p>
+                        <p class="font-semibold">Total: ₹${itemTotal}</p>
+                    </div>
+                `;
+
+                checkoutContainer.appendChild(checkoutItem);
+            });
+
+            checkoutTotal.textContent = `₹${totalAmount}`;
+        }
+
+        document.getElementById("payButton").addEventListener("click", function() {
+            const userDetails = {
+                name: document.getElementById("name").value,
+                address: document.getElementById("address").value,
+                pincode: document.getElementById("pincode").value,
+                mobile: document.getElementById("mobile").value,
+                cart: getCart(),
+                totalAmount: document.getElementById("checkoutTotal").textContent
+            };
+
+            localStorage.setItem("userDetails", JSON.stringify(userDetails));
+            window.location.href = "/payment"; // Redirect to payment page
+        });
+
+        window.onload = renderCheckout;
+    </script>
+</body>
+</html>

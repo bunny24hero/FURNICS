@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Us</title>
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="../css/aboutUs.css">
+
+    <!-- Scroll Reveal Library -->
+    <script src="https://unpkg.com/scrollreveal"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/js/all.min.js" crossorigin="anonymous"></script>
+</head>
+<body class="bg-white">
+
+    <!-- Navbar -->
+    <header class="bg-[#002d6e] text-white py-4 shadow-lg fade-in">
+        <div class="container mx-auto flex justify-between items-center px-6">
+            
+            <!-- Logo -->
+            <a href="/">
+                <img src="../imageAssets/Screenshot 2025-01-12 103506.png" alt="Website Logo" class="h-12 transform transition duration-500 hover:scale-110">
+            </a>
+            <a href="#" class="text-2xl font-bold">FURNICS</a>
+
+            <nav class="flex space-x-6">
+                <a href="/" class="nav-link">Home</a>
+                <a href="/services" class="nav-link">Services</a>
+                <a href="/contact" class="nav-link">Contact</a>
+            </nav>
+            <a href="/userProfile" class="text-white text-xl hover:text-[#ff8000] transition"><i class="fas fa-user"></i></a>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <h2 class="hero-heading">Who We Are</h2>
+        <p class="mt-4 text-lg opacity-100 transition-opacity duration-1000">
+            At FURNICS, we are dedicated to providing stylish, high-quality furniture that brings comfort, elegance, and functionality to every home.</p>
+    </section>
+
+    <!-- About Content -->
+    <section class="container mx-auto py-12 px-6">
+        <div class="about-container">
+            <h3 class="text-2xl font-semibold text-[#002d6e]">Our Mission</h3>
+            <p class="mt-4 text-gray-700 reveal">At FURNICS, we are committed to delivering premium-quality furniture that combines style, comfort, and durability. Our mission is to enhance every home and workspace with innovative, functional, and aesthetically pleasing furniture, ensuring 100% customer satisfaction.</p>
+            
+            <h3 class="text-2xl font-semibold text-[#002d6e] mt-8">Our Vision</h3>
+            <p class="mt-4 text-gray-700 reveal">We envision a world where everyone has access to beautifully designed furniture that enhances their lifestyle. FURNICS strives to be the go-to platform for modern, affordable, and sustainable furniture, creating spaces that inspire, comfort, and transform everyday living.</p>
+
+            <h3 class="text-2xl font-semibold text-[#002d6e] mt-8">Our Team</h3>
+            <div class="team-grid">
+                <div class="team-member reveal">
+                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQwrFEHX9QSFRYEhByZOIUum_cNhX_aU0xqYw&s" alt="Team Member" class="team-img">
+                    <h4 class="team-name">John Doe</h4>
+                    <p class="team-role">CEO & Founder</p>
+                </div>
+                <div class="team-member reveal">
+                    <img src="https://img.freepik.com/free-photo/businessman-black-suit-promoting-something_114579-15897.jpg?uid=R164229207&ga=GA1.1.402912241.1722742161&semt=ais_authors_boost" alt="Team Member" class="team-img">
+                    <h4 class="team-name">Jane Smith</h4>
+                    <p class="team-role">Marketing Director</p>
+                </div>
+                <div class="team-member reveal">
+                    <img src="https://img.freepik.com/premium-photo/man-with-glasses-working-computer_1254813-109484.jpg?uid=R164229207&ga=GA1.1.402912241.1722742161&semt=ais_authors_boost" alt="Team Member" class="team-img">
+                    <h4 class="team-name">Michael Brown</h4>
+                    <p class="team-role">Lead Developer</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Call to Action -->
+    <section class="cta reveal">
+        <h3 class="text-3xl font-bold">Want to Work With Us?</h3>
+        <p class="mt-4">Join us and be part of our amazing journey.</p>
+        <a href="/contact" class="cta-button">Contact Us</a>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <p>&copy; 2024 Your Company. All Rights Reserved.</p>
+    </footer>
+
+    <!-- Custom JS -->
+    <script src="../js/aboutUs.js"></script>
+</body>
+</html>

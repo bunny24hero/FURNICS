@@ -1,0 +1,114 @@
+
+
+
+
+
+
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Cart</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-[#002d6e] p-6">
+    <header >
+        <div class="container mx-auto flex justify-center">
+            <img src="../imageAssets/Screenshot 2025-01-12 103506.png" alt="FURNICS Logo" class="h-40">
+        </div>
+    </header>
+    <div class="max-w-4xl mx-auto bg-white p-6 rounded-lg shadow-lg">
+        <h2 class="text-2xl font-bold mb-4">Your Cart</h2>
+        <div id="cartItems" class="space-y-4"></div>
+        <div class="mt-4">
+            <p class="text-lg font-semibold text-[#002d6e]">Grand Total: <span id="grandTotal">₹0</span></p>
+        </div>
+        <div class="mt-6 text-center">
+            <button id="checkoutButton" class="bg-green-500 text-white px-6 py-2 rounded-lg text-lg font-bold hidden" onclick="proceedToCheckout()">
+                Proceed to Checkout
+            </button>
+        </div>
+    </div>
+
+    <script>
+        function getCart() {
+            return JSON.parse(localStorage.getItem("cart")) || [];
+        }
+
+        function saveCart(cart) {
+            localStorage.setItem("cart", JSON.stringify(cart));
+        }
+
+        function renderCart() {
+            const cart = getCart();
+            const cartContainer = document.getElementById("cartItems");
+            const grandTotalElement = document.getElementById("grandTotal");
+            
+            if (cart.length === 0) {
+                cartContainer.innerHTML = "<p>Your cart is empty.</p>";
+                grandTotalElement.textContent = "₹0";
+                document.getElementById("checkoutButton").classList.add("hidden");
+                return;
+            }
+
+            cartContainer.innerHTML = "";
+            let grandTotal = 0;
+
+            cart.forEach((item, index) => {
+                let itemTotal = item.price * item.quantity;
+                grandTotal += itemTotal;
+
+                const cartItem = document.createElement("div");
+                cartItem.classList.add("cart-item", "flex", "justify-between", "bg-gray-50", "p-4", "rounded-lg", "mb-2");
+
+                cartItem.innerHTML = `
+                    <img src="${item.image}" class="w-20 h-20 rounded">
+                    <div class="flex-1 ml-4">
+                        <h2 class="text-lg font-bold">${item.name}</h2>
+                        <p>Size: ${item.variant}</p>
+                        <p>Price: ₹${item.price}</p>
+                        <div class="flex items-center space-x-2">
+                            <button class="bg-red-500 text-white px-2 py-1 rounded" onclick="updateQuantity(${index}, -1)">-</button>
+                            <span id="quantity-${index}" class="px-4">${item.quantity}</span>
+                            <button class="bg-green-500 text-white px-2 py-1 rounded" onclick="updateQuantity(${index}, 1)">+</button>
+                        </div>
+                        <p class="font-semibold mt-2">Total: ₹<span id="itemTotal-${index}">${itemTotal}</span></p>
+                        <button class="bg-red-500 text-white px-2 py-1 rounded mt-2" onclick="removeFromCart(${index})">Remove</button>
+                    </div>
+                `;
+
+                cartContainer.appendChild(cartItem);
+            });
+
+            grandTotalElement.textContent = `₹${grandTotal}`;
+            document.getElementById("checkoutButton").classList.remove("hidden"); // Show checkout button
+        }
+
+        function updateQuantity(index, change) {
+            let cart = getCart();
+            if (cart[index].quantity + change >= 1) {
+                cart[index].quantity += change;
+                saveCart(cart);
+                renderCart(); // Refresh UI
+            }
+        }
+
+        function removeFromCart(index) {
+            let cart = getCart();
+            cart.splice(index, 1); // Remove item
+            saveCart(cart);
+            renderCart(); // Refresh UI
+        }
+
+        function proceedToCheckout() {
+            window.location.href = "/checkout"; // Replace with your actual checkout page URL
+        }
+
+        window.onload = renderCart;
+    </script>
+</body>
+</html>

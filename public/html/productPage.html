@@ -1,0 +1,70 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>All Products</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="../css/proPage.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/js/all.min.js" crossorigin="anonymous"></script>
+</head>
+<body class="bg-white">
+  <header class="bg-[#002d6e] text-white py-4 text-center">
+    <div class="container mx-auto flex justify-between items-center py-4 px-6">
+      <!-- Logo -->
+      <div class="flex items-center space-x-3">
+          <img src="../imageAssets/Screenshot 2025-01-12 103506.png" alt="Website Logo" class="h-10 w-auto">  <!-- Add your logo path -->
+          <a href="#" class="text-2xl font-bold">FURNICS</a>
+      </div>
+
+      <!-- Navigation Links -->
+      <nav>
+          <ul class="flex space-x-6">
+              <li><a href="/" class="hover:text-[#ff8000] transition">Home</a></li>
+              <li><a href="/aboutUs" class="hover:text-[#ff8000] transition">About</a></li>
+              <li><a href="/contact" class="hover:text-[#ff8000] transition">Contact</a></li>
+          </ul>
+      </nav>
+
+      <!-- Profile & Cart Icons -->
+      <div class="flex space-x-6">
+          <a href="/UserCart" class="text-white text-xl hover:text-[#ff8000] transition"><i class="fas fa-shopping-cart"></i></a>
+          <a href="/userProfile" class="text-white text-xl hover:text-[#ff8000] transition"><i class="fas fa-user"></i></a>
+      </div>
+  </div>
+      <h1 class="text-3xl font-bold">Our Furniture Collection</h1>
+  </header>
+
+  <main class="container mx-auto mt-6">
+      <div class="flex justify-center gap-4">
+          <button class="category-btn" data-category="all">All</button>
+          <button class="category-btn" data-category="Wardrobe">Wardrobe</button>
+          <button class="category-btn" data-category="Bed">Bed</button>
+          <button class="category-btn" data-category="Office Chair">Office Chair</button>
+          <button class="category-btn" data-category="Sofa">Sofa</button>
+          <button class="category-btn" data-category="Shoe Rack">Shoe Rack</button>
+          <button class="category-btn" data-category="Study Table">Study Table</button>
+      </div>
+
+      <div id="productContainer" class="grid grid-cols-1 md:grid-cols-3 gap-6 p-6"></div>
+  </main>
+
+  <script src="../js/proPage.js"></script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+

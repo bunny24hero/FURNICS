@@ -1,0 +1,97 @@
+
+
+
+
+
+
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product Details</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link rel="stylesheet" href="../css/proDetail.css">
+</head>
+
+<body class="bg-white flex justify-center items-center min-h-screen">
+    <div class="absolute top-6 right-6 flex space-x-6">
+        <a href="/userProfile" class="text-[#002d6e] text-2xl hover:text-[#ff8000]">
+            <i class="fa-solid fa-user"></i>
+        </a>
+        <a href="/UserCart" class="text-[#002d6e] text-2xl hover:text-[#ff8000] transition"><i class="fas fa-shopping-cart"></i></a>
+        <a href="/userOrderHistory" class="text-[#002d6e] text-2xl hover:text-[#ff8000]" title="Order History">
+            <i class="fa-solid fa-box"></i>
+        </a>
+    </div>
+    <div class="container mx-auto p-6 bg-white rounded-lg shadow-lg">
+        <div class="flex flex-col md:flex-row gap-8">
+            <!-- Image Slider Section -->
+            <div class="md:w-2/3">
+                <div class="slider">
+                    <div class="slides" id="imageSlider"></div>
+                    <div class="dots" id="sliderDots"></div>
+                </div>
+            </div>
+
+            <!-- Product Details Section -->
+            <div class="md:w-1/3">
+                <h1 id="productName" class="text-3xl font-bold text-[#002d6e]"></h1>
+                <p id="productPrice" class="text-2xl text-[#ff8000] mt-2"></p>
+
+                <!-- Features List -->
+                <div class="mt-4 w-full">
+                    <h2 class="text-lg font-semibold cursor-pointer flex items-center text-[#002d6e]"
+                        onclick="toggleFeatures()">
+                        Features <i class="fas fa-chevron-down ml-2"></i>
+                    </h2>
+                    <ul id="featuresList" class="features-list list-disc list-inside mt-2 text-[#002d6e]"></ul>
+                </div>
+
+                <!-- Variant Selection -->
+                <div class="mt-4">
+                    <label class="block text-sm font-medium text-[#002d6e]">Select Size:</label>
+                    <div id="variantContainer" class="mt-2 flex space-x-4"></div>
+                </div>
+
+                <!-- Quantity Selection -->
+                <!-- Quantity Selection -->
+                <div class="mt-4">
+                    <label class="block text-sm font-medium text-[#002d6e]" for="quantity">Quantity:</label>
+                    <div class="quantity-container">
+                        <button class="quantity-btn" onclick="decreaseQuantity()">-</button>
+                        <input type="number" id="quantity" name="quantity" value="1" min="1" class="quantity-input"
+                            readonly>
+                        <button class="quantity-btn" onclick="increaseQuantity()">+</button>
+                    </div>
+                </div>
+
+                <!-- Add to Cart Button -->
+                <!-- <div class="mt-6">
+                    <button onclick="addToCart()" class="add-to-cart-btn">Add to Cart</button>
+                </div> -->
+                <button id="addToCartButton" data-product-id=""
+                    class="bg-[#ff8000] text-white px-4 py-2 rounded-lg mt-4">
+                    Add to Cart
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Image Modal -->
+    <div id="myModal" class="modal">
+        <span class="close" onclick="closeModal()">&times;</span>
+        <img class="modal-content" id="img01">
+    </div>
+
+    <script src="../js/proDetail.js">
+    </script>
+</body>
+
+</html>

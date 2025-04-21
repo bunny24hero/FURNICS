@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Details</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-[#002d6e] p-6">
+    <div class="max-w-4xl mx-auto bg-white p-6 rounded-lg shadow-lg">
+        <h2 class="text-2xl font-bold mb-4 text-[#002d6e]">Add Your Details</h2>
+        
+        <!-- Product List -->
+        <div id="orderSummary" class="space-y-4"></div>
+
+        <!-- Grand Total -->
+        <div class="mt-4">
+            <p class="text-lg font-semibold text-[#002d6e]">Grand Total: <span id="grandTotal">₹0</span></p>
+        </div>
+
+        <!-- User Detail Form -->
+        <form id="detailForm" class="mt-6 space-y-4">
+            <div>
+                <label class="block font-semibold text-[#002d6e]">Name</label>
+                <input type="text" id="name" class="w-full p-2 border border-gray-300 rounded-lg" required>
+            </div>
+
+            <div>
+                <label class="block font-semibold text-[#002d6e]">Address</label>
+                <textarea id="address" class="w-full p-2 border border-gray-300 rounded-lg" required></textarea>
+            </div>
+
+            <div>
+                <label class="block font-semibold text-[#002d6e]">Pincode</label>
+                <input type="text" id="pincode" class="w-full p-2 border border-gray-300 rounded-lg" pattern="[0-9]{6}" maxlength="6" required>
+            </div>
+
+            <div>
+                <label class="block font-semibold text-[#002d6e]">Mobile Number</label>
+                <input type="text" id="mobile" class="w-full p-2 border border-gray-300 rounded-lg" pattern="[0-9]{10}" maxlength="10" required>
+            </div>
+
+            <!-- Pay Button -->
+            <div class="mt-6 text-center">
+                <button type="button" id="payButton" class="bg-[#ff8000] text-white px-6 py-2 rounded-lg text-lg font-bold">
+                    Pay
+                </button>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        function getCart() {
+            return JSON.parse(localStorage.getItem("cart")) || [];
+        }
+
+        function renderOrderSummary() {
+            const cart = getCart();
+            const orderSummary = document.getElementById("orderSummary");
+            const grandTotalElement = document.getElementById("grandTotal");
+
+            if (cart.length === 0) {
+                orderSummary.innerHTML = "<p>Your cart is empty.</p>";
+                grandTotalElement.textContent = "₹0";
+                return;
+            }
+
+            orderSummary.innerHTML = "";
+            let totalAmount = 0;
+
+            cart.forEach(item => {
+                let itemTotal = item.price * item.quantity;
+                totalAmount += itemTotal;
+
+                const orderItem = document.createElement("div");
+                orderItem.classList.add("flex", "justify-between", "bg-gray-100", "p-4", "rounded-lg", "mb-2");
+
+                orderItem.innerHTML = `
+                    <img src="${item.image}" class="w-20 h-20 rounded">
+                    <div class="flex-1 ml-4">
+                        <h2 class="text-lg font-bold">${item.name}</h2>
+                        <p>Size: ${item.variant}</p>
+                        <p>Price: ₹${item.price}</p>
+                        <p>Quantity: ${item.quantity}</p>
+                        <p class="font-semibold">Total: ₹${itemTotal}</p>
+                    </div>
+                `;
+
+                orderSummary.appendChild(orderItem);
+            });
+
+            grandTotalElement.textContent = `₹${totalAmount}`;
+        }
+
+        document.getElementById("payButton").addEventListener("click", function() {
+            const name = document.getElementById("name").value.trim();
+            const address = document.getElementById("address").value.trim();
+            const pincode = document.getElementById("pincode").value.trim();
+            const mobile = document.getElementById("mobile").value.trim();
+
+            if (!name || !address || !pincode || !mobile) {
+                alert("Please fill in all required fields.");
+                return;
+            }
+
+            // Store user details in local storage (to pass to payment page)
+            const userDetails = { name, address, pincode, mobile };
+            localStorage.setItem("userDetails", JSON.stringify(userDetails));
+
+            // Redirect to payment page
+            window.location.href = "/payment"; // Replace with your actual payment page URL
+        });
+
+        window.onload = renderOrderSummary;
+    </script>
+</body>
+</html>

@@ -1,0 +1,343 @@
+
+
+
+
+
+
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <script src="https://js.stripe.com/v3/"></script>
+</head>
+
+<body class="bg-[#002d6e] p-6">
+    <div class="container mx-auto flex justify-center">
+        <img src="../imageAssets/Screenshot 2025-01-12 103506.png"  alt="FURNICS Logo" class="h-40" h>
+    </div>
+    <div class="absolute top-6 right-6 flex space-x-6">
+        <a href="#" class="text-[#FFFFFF] text-2xl hover:text-[#ff8000]">
+            <i class="fa-solid fa-user"></i>
+        </a>
+        <a href="/userOrderHistory" class="text-[#FFFFFF] text-2xl hover:text-[#ff8000]" title="Order History">
+            <i class="fa-solid fa-box"></i>
+        </a>
+    </div>
+    <div class="max-w-4xl mx-auto bg-white p-6 rounded-lg shadow-lg">
+        <h2 class="text-2xl font-bold mb-4 text-[#002d6e]">Payment</h2>
+
+        <div id="orderSummary" class="mb-6"></div>
+
+        <div class="mb-6">
+            <h3 class="text-lg font-semibold">Select Payment Method:</h3>
+            <label class="block mt-2">
+                <input type="radio" name="paymentMethod" value="COD" class="mr-2" checked> Cash on Delivery
+            </label>
+            <label class="block mt-2">
+                <input type="radio" name="paymentMethod" value="Stripe" class="mr-2"> Pay with Stripe
+            </label>
+        </div>
+
+        <button id="payNowButton" class="bg-[#ff8000] text-white px-6 py-2 rounded-lg text-lg font-bold w-full">
+            Proceed to Payment
+        </button>
+    </div>
+
+    <script>
+        function loadOrderDetails() {
+            const userDetails = JSON.parse(localStorage.getItem("userDetails"));
+            if (!userDetails) {
+                document.getElementById("orderSummary").innerHTML = "<p>No order details found.</p>";
+                return;
+            }
+
+            let productDetails = "";
+            userDetails.cart.forEach(item => {
+                productDetails += `
+                    <div class="p-2 border-b">
+                        <p class="font-semibold">${item.name} (Size: ${item.variant})</p>
+                        <p>Price: ₹${item.price} | Quantity: ${item.quantity}</p>
+                        <p class="font-bold">Total: ₹${item.price * item.quantity}</p>
+                    </div>
+                `;
+            });
+
+            document.getElementById("orderSummary").innerHTML = `
+                <p class="text-lg font-semibold">Name: ${userDetails.name}</p>
+                <p>Address: ${userDetails.address}</p>
+                <p>Pincode: ${userDetails.pincode}</p>
+                <p>Mobile: ${userDetails.mobile}</p>
+                <div class="mt-4 bg-gray-100 p-4 rounded-lg">
+                    <h3 class="text-xl font-bold mb-2">Order Summary</h3>
+                    ${productDetails}
+                </div>
+                <!--<p class="font-semibold mt-4">Grand Total: ₹${userDetails.totalAmount}</p>-->
+                <p class="font-semibold mt-4">Grand Total: ${userDetails.totalAmount}</p>
+            `;
+        }
+
+        function generateInvoice(userDetails) {
+            const invoiceContent = `
+                <html>
+                <head>
+                    <title>Invoice</title>
+                    <style>
+                        body { font-family: Arial, sans-serif; padding: 20px; }
+                        .invoice-box { max-width: 600px; margin: auto; border: 1px solid #ccc; padding: 20px; }
+                        h2 { text-align: center; color: #002d6e; }
+                        table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+                        th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+                        img { max-width: 150px; display: block; margin: 0 auto; }
+                    </style>
+                </head>
+                <body>
+                    <div class="invoice-box">
+                        <h2>FURNICS</h2>
+                        <p><strong>Name:</strong> ${userDetails.name}</p>
+                        <p><strong>Address:</strong> ${userDetails.address}</p>
+                        <p><strong>Pincode:</strong> ${userDetails.pincode}</p>
+                        <p><strong>Mobile:</strong> ${userDetails.mobile}</p>
+                        <p><strong>Payment Mode:</strong> ${userDetails.paymentMethod}</p>
+                        <table>
+                            <tr>
+                                <th>Product</th>
+                                <th>Size</th>
+                                <th>Price</th>
+                                <th>Quantity</th>
+                                <th>Total</th>
+                            </tr>
+                            ${userDetails.cart.map(item => `
+                                <tr>
+                                    <td>${item.name}</td>
+                                    <td>${item.variant}</td>
+                                    <td>₹${item.price}</td>
+                                    <td>${item.quantity}</td>
+                                    <td>₹${item.price * item.quantity}</td>
+                                </tr>
+                            `).join("")}
+                        </table>
+                        <!-- <h3 style="text-align: right;">Grand Total: ₹${userDetails.totalAmount}</h3> -->
+                        <h3 style="text-align: right;">Grand Total: ${userDetails.totalAmount}</h3>
+                    </div>
+                </body>
+                </html>
+            `;
+
+            const blob = new Blob([invoiceContent], { type: 'text/html' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement("a");
+            a.href = url;
+            a.download = "invoice.html";
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+
+        document.getElementById("payNowButton").addEventListener("click", async function () {
+            const paymentMethod = document.querySelector('input[name="paymentMethod"]:checked').value;
+            const userDetails = JSON.parse(localStorage.getItem("userDetails"));
+            const sessionData = JSON.parse(localStorage.getItem("sessionUser")); // Fetch user session
+
+            if (!userDetails || !sessionData) {
+                alert("No order details found or user not logged in!");
+                return;
+            }
+
+            // Attach userId to order details
+            userDetails.userId = sessionData.userId;
+            userDetails.paymentMethod = paymentMethod;
+
+            // Save order in localStorage under user ID
+            let userOrders = JSON.parse(localStorage.getItem(`orders_${sessionData.userId}`)) || [];
+            userOrders.push(userDetails);
+            localStorage.setItem(`orders_${sessionData.userId}`, JSON.stringify(userOrders));
+
+            if (paymentMethod === "COD") {
+                showSuccessAlert("Order placed successfully! Your invoice is being downloaded.");
+                generateInvoice(userDetails);
+                localStorage.removeItem("cart");
+                localStorage.removeItem("userDetails");
+                window.location.href = "/thank-you";
+            } else{
+                alert("Redirecting to Stripe payment...");
+
+                try {
+                    // const stripe = Stripe("HERE IS YOUR PUBLIC KEY");
+
+                    const response = await fetch("/create-checkout-session", {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify({
+                            cart: userDetails.cart,
+                            totalAmount: userDetails.totalAmount,
+                        }),
+                    });
+
+                    const session = await response.json();
+
+                    if (!session.id) {
+                        throw new Error("Session ID not received");
+                    }
+
+                    stripe.redirectToCheckout({ sessionId: session.id }).then((result) => {
+                        if (result.error) {
+                            console.error(result.error);
+                            alert("Payment failed. Please try again.");
+                        }
+                    });
+
+                } catch (error) {
+                    console.error("Error:", error);
+                    alert("Something went wrong. Please try again.");
+                }
+            }
+            
+
+            
+        });
+
+
+
+
+    
+        // Function to check if payment was successful
+        function checkPaymentStatus() {
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get("paymentSuccess") === "true") {
+                const userDetails = JSON.parse(localStorage.getItem("userDetails"));
+                if (userDetails) {
+                    // Update payment method to Stripe for successful Stripe payments
+                    userDetails.paymentMethod = "Stripe";
+                    localStorage.setItem("userDetails", JSON.stringify(userDetails));
+
+                    showSuccessAlert("Payment successful! Your invoice is being downloaded.");
+                    generateInvoice(userDetails);
+                    localStorage.removeItem("cart");
+                    localStorage.removeItem("userDetails");
+                    history.replaceState({}, document.title, window.location.pathname); // Remove query params
+                }
+            }
+        }
+
+        // Function to show the success alert box
+        function showSuccessAlert(message) {
+            const alertBox = document.createElement("div");
+            alertBox.innerHTML = `
+        <div class="fixed top-4 left-1/2 transform -translate-x-1/2 bg-white text-[#002d6e] border-l-4 border-[#ff8000] p-4 shadow-lg rounded-md w-96">
+            <p class="font-bold text-lg">Success</p>
+            <p>${message}</p>
+        </div>
+    `;
+            document.body.appendChild(alertBox);
+            setTimeout(() => {
+                alertBox.remove();
+            }, 4000); // Remove after 4 seconds
+        }
+
+        // Run the function when the page loads
+        window.onload = function () {
+            checkPaymentStatus();
+            loadOrderDetails();
+        };
+
+    </script>
+</body>
+
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

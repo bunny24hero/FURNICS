@@ -1,0 +1,15 @@
+html {
+    scroll-behavior: smooth;
+}
+
+
+input:focus, textarea:focus {
+    border-width: 2px;
+}
+
+
+@media (max-width: 768px) {
+    h2 {
+        font-size: 2rem;
+    }
+}

@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin - Orders</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+</head>
+<body class="bg-[#002d6e] p-6">
+<!-- Navigation Bar -->
+<header class="bg-[#002d6e] py-4 shadow-md">
+    <div class="container mx-auto flex justify-between items-center px-6">
+
+        <!-- Logo & Website Name -->
+        <div class="flex items-center space-x-3">
+            <img src="../imageAssets/Screenshot 2025-01-12 103506.png" alt="FURNICS Logo" class="h-14"> 
+            <span class="text-3xl font-bold text-white">FURNICS</span>
+        </div>
+
+        <!-- Button & Icons -->
+        <div class="flex items-center space-x-6">
+            <a href="/addProduct" class="bg-[#ff8000] text-white px-5 py-2 rounded-md font-semibold hover:bg-[#e67300] transition">
+                Inventory
+            </a>
+            <a href="/userProfile" class="text-white text-2xl hover:text-[#ff8000] transition" title="Profile">
+                <i class="fa-solid fa-user"></i>
+            </a>
+        </div>
+
+    </div>
+</header>
+    <div class="max-w-5xl mx-auto bg-white p-6 rounded-lg shadow-lg">
+        <h2 class="text-2xl font-bold mb-4 text-[#002d6e]">All Orders</h2>
+
+        <!-- Search Bar -->
+        <input type="text" id="searchUserId" placeholder="Search by User ID"
+            class="border border-gray-300 p-2 w-full rounded-lg mb-4">
+
+        <!-- Orders Table -->
+        <div class="overflow-x-auto">
+            <table class="min-w-full border border-gray-300">
+                <thead class="bg-[#002d6e] text-white">
+                    <tr>
+                        <th class="p-2 border">User ID</th>
+                        <th class="p-2 border">Name</th>
+                        <th class="p-2 border">Payment Method</th>
+                        <th class="p-2 border">Total Amount</th>
+                        <th class="p-2 border">Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="ordersTableBody"></tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        function loadOrders() {
+            const ordersTable = document.getElementById("ordersTableBody");
+            ordersTable.innerHTML = ""; // Clear previous data
+
+            for (let i = 0; i < localStorage.length; i++) {
+                const key = localStorage.key(i);
+                if (key.startsWith("orders_")) {
+                    const orders = JSON.parse(localStorage.getItem(key));
+
+                    orders.forEach(order => {
+                        const row = document.createElement("tr");
+                        row.classList.add("border");
+
+                        row.innerHTML = `
+                            <td class="p-2 border">${order.userId}</td>
+                            <td class="p-2 border">${order.name}</td>
+                            <td class="p-2 border">${order.paymentMethod}</td>
+                            <!-- <td class="p-2 border">₹${order.totalAmount}</td> -->
+                            <td class="p-2 border">${order.totalAmount}</td>
+                            <td class="p-2 border">
+                                <button onclick="viewOrder('${key}')"
+                                    class="bg-[#ff8000] text-white px-3 py-1 rounded-lg text-sm">View</button>
+                            </td>
+                        `;
+
+                        ordersTable.appendChild(row);
+                    });
+                }
+            }
+        }
+
+        function viewOrder(orderKey) {
+            const orders = JSON.parse(localStorage.getItem(orderKey));
+            alert("Order Details:\n" + JSON.stringify(orders, null, 2)); // For now, show order details in an alert
+        }
+
+        document.getElementById("searchUserId").addEventListener("input", function () {
+            const searchValue = this.value.toLowerCase();
+            const rows = document.querySelectorAll("#ordersTableBody tr");
+
+            rows.forEach(row => {
+                const userId = row.children[0].textContent.toLowerCase();
+                row.style.display = userId.includes(searchValue) ? "" : "none";
+            });
+        });
+
+        window.onload = loadOrders;
+    </script>
+
+</body>
+</html>

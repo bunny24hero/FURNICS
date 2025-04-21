@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment Success</title>
+    <script>
+        function generateInvoice(userDetails) {
+            const invoiceContent = `
+                <html>
+                <head>
+                    <title>Invoice</title>
+                    <style>
+                        body { font-family: Arial, sans-serif; padding: 20px; }
+                        .invoice-box { max-width: 600px; margin: auto; border: 1px solid #ccc; padding: 20px; }
+                        h2 { text-align: center; color: #002d6e; }
+                        table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+                        th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+                        img { max-width: 150px; display: block; margin: 0 auto; }
+                    </style>
+                </head>
+                <body>
+                    <div class="invoice-box">
+                        <img src="../imageAssets/Screenshot 2025-01-12 103506.png" alt="FURNICS Logo">
+                        <h2>FURNICS</h2>
+                        <p><strong>Name:</strong> ${userDetails.name}</p>
+                        <p><strong>Address:</strong> ${userDetails.address}</p>
+                        <p><strong>Pincode:</strong> ${userDetails.pincode}</p>
+                        <p><strong>Mobile:</strong> ${userDetails.mobile}</p>
+                        <p><strong>Payment Mode:</strong> ${userDetails.paymentMethod}</p>
+                        <table>
+                            <tr>
+                                <th>Product</th>
+                                <th>Size</th>
+                                <th>Price</th>
+                                <th>Quantity</th>
+                                <th>Total</th>
+                            </tr>
+                            ${userDetails.cart.map(item => `
+                                <tr>
+                                    <td>${item.name}</td>
+                                    <td>${item.variant}</td>
+                                    <td>₹${item.price}</td>
+                                    <td>${item.quantity}</td>
+                                    <td>₹${item.price * item.quantity}</td>
+                                </tr>
+                            `).join("")}
+                        </table>
+                        <h3 style="text-align: right;">Grand Total: ₹${userDetails.totalAmount}</h3>
+                    </div>
+                </body>
+                </html>
+            `;
+
+            const blob = new Blob([invoiceContent], { type: 'text/html' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement("a");
+            a.href = url;
+            a.download = "invoice.html";
+            a.click();
+            URL.revokeObjectURL(url);
+
+            // Clear stored data after downloading invoice
+            localStorage.removeItem("invoiceData");
+        }
+
+        window.onload = function() {
+            const userDetails = JSON.parse(localStorage.getItem("invoiceData"));
+            if (!userDetails) {
+                alert("No invoice data found.");
+                return;
+            }
+
+            // Generate and download invoice
+            generateInvoice(userDetails);
+
+            // Redirect to homepage after few seconds
+            setTimeout(() => {
+                window.location.href = "/";
+            }, 5000);
+        };
+    </script>
+</head>
+<body>
+    <h1 style="text-align: center; color: green;">Payment Successful! Your invoice is downloading...</h1>
+</body>
+</html>

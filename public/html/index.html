@@ -1,0 +1,355 @@
+<html>
+
+<head>
+    <script src="https://cdn.tailwindcss.com">
+    </script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&amp;display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="../css/style.css">
+    <style>
+        .carousel {
+            display: flex;
+            overflow-x: hidden;
+            scroll-snap-type: x mandatory;
+        }
+
+        .carousel-item {
+            min-width: 100%;
+            scroll-snap-align: center;
+        }
+    </style>
+</head>
+
+<body class="bg-gray-100">
+    <header class="bg-white shadow-sm fixed w-full z-10">
+        <div class="container mx-auto flex flex-wrap items-center justify-between py-2 px-4">
+            <div class="flex items-center space-x-4">
+                <img alt="Furniture logo" class="h-10 w-10" height="40"
+                    src="../imageAssets/Screenshot 2025-01-12 103506.png" width="40" />
+                <span class="text-xl font-bold text-[#002d6e]">
+                    Furnics Store
+                </span>
+            </div>
+            <div class="flex-grow mt-2 md:mt-0 md:ml-4">
+                <input class="w-full border rounded-full px-4 py-1 text-sm" placeholder="Search furniture..."
+                    type="text" />
+            </div>
+            <div class="flex items-center space-x-4 mt-2 md:mt-0">
+                <nav class="flex items-center space-x-4">
+                    <!-- <a class="text-[#002d6e] hover:text-[#ff8000]" href="#">
+                        Home
+                    </a> -->
+                    <a class="text-[#002d6e] hover:text-[#ff8000]" href="/allProduct">
+                        All Products
+                    </a>
+                    <a class="text-[#002d6e] hover:text-[#ff8000]" href="#">
+                        Best Sellers
+                    </a>
+                    <a class="text-[#002d6e] hover:text-[#ff8000]" href="#">
+                        Sale
+                    </a>
+                    <a class="text-[#002d6e] hover:text-[#ff8000]"  href="/logInSignUp">
+                        Sign in
+                    </a>
+                    <a class="text-[#002d6e] hover:text-[#ff8000]"  href="/logInSignUp">
+                        Sign up
+                    </a>
+                    <a class="bg-[#ff8000] text-white px-4 py-1 rounded-full" href="/userProfile">
+                        Profile
+                    </a>
+                    <a class="bg-[#ff8000] text-white px-4 py-1 rounded-full flex items-center" href="/UserCart">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2h13.2l1.6 8H6.4M6 21a2 2 0 100-4 2 2 0 000 4zm12 0a2 2 0 100-4 2 2 0 000 4z" />
+                        </svg>
+                        Cart
+                    </a>
+                    <a class="bg-[#ff8000] text-white px-4 py-1 rounded-full cursor-pointer"
+                        onclick="handleLogout()">
+                        Log Out
+                    </a>
+                </nav>
+            </div>
+        </div>
+        <div class="bg-[#002d6e]">
+            <div class="container mx-auto flex items-center space-x-4 py-2 px-4">
+                <a class="text-white hover:text-[#ff8000]" href="#">
+                    Living Room
+                </a>
+                <a class="text-white hover:text-[#ff8000]" href="#">
+                    Bedroom
+                </a>
+                <a class="text-white hover:text-[#ff8000]" href="#">
+                    Dining Room
+                </a>
+                <a class="text-white hover:text-[#ff8000]" href="#">
+                    Office
+                </a>
+                <a class="text-white hover:text-[#ff8000]" href="#">
+                    Outdoor
+                </a>
+                <a class="text-white hover:text-[#ff8000]" href="#">
+                    Decor
+                </a>
+                <a class="text-white hover:text-[#ff8000]" href="#">
+                    Lighting
+                </a>
+                <a class="bg-[#ff8000] text-white px-4 py-1 rounded-full" href="#">
+                    Special Offers
+                </a>
+            </div>
+        </div>
+    </header>
+    <main class="pt-24">
+        <!-- Main content goes here -->
+    </main>
+    <div class="relative h-screen">
+        <div class="carousel">
+            <div class="carousel-item relative h-screen">
+                <img alt="Two people sitting on a bench wearing casual clothes and sneakers"
+                    class="w-full h-full object-cover" src="../imageAssets/greenSofa.jpg" />
+                <div class="absolute inset-0 bg-black opacity-50">
+                </div>
+                <div class="absolute inset-0 flex flex-col items-center justify-center text-center text-white px-4">
+                    <h1 class="text-4xl md:text-6xl font-bold font-playfair">
+                        Style Your Space, Elevate Your Living
+                    </h1>
+                    <button class="mt-4 px-6 py-2 bg-orange-600 text-white font-semibold rounded">
+                        SHOW PRODUCT
+                    </button>
+                    <div class="flex justify-between w-full mt-8 px-4">
+                        <a class="text-sm md:text-base" href="#prev" onclick="prevSlide()">
+                            PREVIOUS
+                        </a>
+                        <a class="text-sm md:text-base" href="#next" onclick="nextSlide()">
+                            NEXT
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="carousel-item relative h-screen">
+                <img alt="Another image description" class="w-full h-full object-cover" height="1080"
+                    src="../imageAssets/blackChair.jpg" width="1920" />
+                <!-- <img alt="screenshort" class="w-full h-full object-cover" height="1080" src="#" width="1920"/> -->
+                <div class="absolute inset-0 bg-black opacity-50">
+                </div>
+                <div class="absolute inset-0 flex flex-col items-center justify-center text-center text-white px-4">
+                    <h1 class="text-4xl md:text-6xl font-bold font-playfair">
+                        Crafted for Comfort, Designed for You
+                    </h1>
+                    <button class="mt-4 px-6 py-2 bg-orange-600 text-white font-semibold rounded">
+                        SHOW PRODUCT
+                    </button>
+                    <div class="flex justify-between w-full mt-8 px-4">
+                        <a class="text-sm md:text-base" href="#prev" onclick="prevSlide()">
+                            PREVIOUS
+                        </a>
+                        <a class="text-sm md:text-base" href="#next" onclick="nextSlide()">
+                            NEXT
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="carousel-item relative h-screen">
+                <img alt="Another image description" class="w-full h-full object-cover" height="1080"
+                    src="../imageAssets/pinkChair.jpg" width="1920" />
+                <!-- <img alt="screenshort" class="w-full h-full object-cover" height="1080" src="#" width="1920"/> -->
+                <div class="absolute inset-0 bg-black opacity-50">
+                </div>
+                <div class="absolute inset-0 flex flex-col items-center justify-center text-center text-white px-4">
+                    <h1 class="text-4xl md:text-6xl font-bold font-playfair">
+                        Your Dream Home, One Piece at a Time
+                    </h1>
+                    <button class="mt-4 px-6 py-2 bg-orange-600 text-white font-semibold rounded">
+                        SHOW PRODUCT
+                    </button>
+                    <div class="flex justify-between w-full mt-8 px-4">
+                        <a class="text-sm md:text-base" href="#prev" onclick="prevSlide()">
+                            PREVIOUS
+                        </a>
+                        <a class="text-sm md:text-base" href="#next" onclick="nextSlide()">
+                            NEXT
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- SALES SECTION -->
+
+
+
+
+
+    <!-- CARDS GRID -->
+    <div class="product-grid">
+        <div class="product-card">
+            <div class="product-image">
+                <img src="https://img.freepik.com/free-photo/vertical-shot-wooden-chair-white_181624-33157.jpg?t=st=1741872087~exp=1741875687~hmac=f3ce393414b8efd569bdc1cbf084f4d35a01fa7fe218e707d761777700ebc86c&w=740" alt="Furniture">
+                <div class="overlay">
+                    <h3>Luxury Wooden Chair</h3>
+                    <p class="price"><span class="old">₹699</span> <span class="new">₹345</span></p>
+                    <button class="add-to-cart"><i class="fa fa-shopping-cart"></i> Add to Cart</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Repeat the product-card div 5 more times for 6 products -->
+        <div class="product-card">
+            <div class="product-image">
+                <img src="https://img.freepik.com/premium-photo/modern-walk-closet-design_1375194-38342.jpg?w=740" alt="Furniture">
+                <div class="overlay">
+                    <h3>Luxurious Wardrobe</h3>
+                    <p class="price"><span class="old">₹699</span> <span class="new">₹345</span></p>
+                    <button class="add-to-cart"><i class="fa fa-shopping-cart"></i> Add to Cart</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="product-card">
+            <div class="product-image">
+                <img src="https://img.freepik.com/free-psd/view-sofa-interior-design-decor_23-2151772696.jpg?t=st=1741872220~exp=1741875820~hmac=7726e3ce12136ab229cc671bb73f7ce13eafe3707277d7853fe7777302e20476&w=1380" alt="Furniture">
+                <div class="overlay">
+                    <h3>Indian Haldi Color Sofa</h3>
+                    <p class="price"><span class="old">₹699</span> <span class="new">₹345</span></p>
+                    <button class="add-to-cart"><i class="fa fa-shopping-cart"></i> Add to Cart</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="product-card">
+            <div class="product-image">
+                <img src="https://img.freepik.com/free-photo/view-shoe-rack-with-storage-space-footwear_23-2150839906.jpg?t=st=1741872297~exp=1741875897~hmac=4fbc166c348c3d5dc003675ef77cef719b59d89f4ada14262b79c44a29003951&w=740" alt="Furniture">
+                <div class="overlay">
+                    <h3>Classic Shoe Rack</h3>
+                    <p class="price"><span class="old">₹699</span> <span class="new">₹345</span></p>
+                    <button class="add-to-cart"><i class="fa fa-shopping-cart"></i> Add to Cart</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="product-card">
+            <div class="product-image">
+                <img src="https://img.freepik.com/free-photo/wooden-desk-with-chair-grey-laptop_23-2148267499.jpg?t=st=1741872434~exp=1741876034~hmac=db00c38c6784c35ddf9e8f6e8916620593bee3706dbd9d6a502a748a19853a47&w=740" alt="Furniture">
+                <div class="overlay">
+                    <h3>Wooden Study Table</h3>
+                    <p class="price"><span class="old">₹699</span> <span class="new">₹345</span></p>
+                    <button class="add-to-cart"><i class="fa fa-shopping-cart"></i> Add to Cart</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="product-card">
+            <div class="product-image">
+                <img src="https://img.freepik.com/premium-photo/white-bed-with-white-sheets-white-pillows_999340-40758.jpg?w=826">
+                <div class="overlay">
+                    <h3>King Size Bed</h3>
+                    <p class="price"><span class="old">₹699</span> <span class="new">₹345</span></p>
+                    <button class="add-to-cart"><i class="fa fa-shopping-cart"></i> Add to Cart</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- FOOTER -->
+    <footer class="py-10 bg-deep-blue text-white">
+        <div class="container mx-auto flex flex-col md:flex-row justify-between items-center">
+            <div class="text-center md:text-left mb-6 md:mb-0">
+                <h2 class="text-2xl font-bold mb-2">About Us</h2>
+                <p class="text-lg">Discover the latest Furniture in the town. Furniture that will make your home
+                    excellent and attractive.</p>
+            </div>
+            <div class="text-center md:text-left mb-6 md:mb-0">
+                <h2 class="text-2xl font-bold mb-2">Contact Us</h2>
+                <p class="text-lg"><strong>Furniture House</strong><br>121, Brunel Road<br>L6Y 4K2, Brampton</p>
+            </div>
+            <div class="text-center md:text-left">
+                <h2 class="text-2xl font-bold mb-2">Social Links</h2>
+                <div class="flex justify-center md:justify-start space-x-4">
+                    <a href="#" class="text-3xl text-white"><i class="fab fa-facebook"></i></a>
+                    <a href="#" class="text-3xl text-white"><i class="fab fa-instagram"></i></a>
+                    <a href="#" class="text-3xl text-white"><i class="fab fa-youtube"></i></a>
+                    <a href="#" class="text-3xl text-white"><i class="fab fa-twitter"></i></a>
+                    <a href="#" class="text-3xl text-white"><i class="fab fa-snapchat"></i></a>
+                </div>
+            </div>
+        </div>
+        <div class="text-center mt-6">
+            <p class="text-bright-orange">&copy; 2019-2020 Furniture House</p>
+        </div>
+        <div class="text-center mt-6">
+            <a href="#" class="text-bright-orange text-3xl"><i class="fas fa-arrow-up"></i></a>
+        </div>
+    </footer>
+
+    <!-- Custom Alert Box -->
+    <div id="customAlert"
+        class="fixed top-0 left-0 w-full h-full flex justify-center items-center bg-black bg-opacity-50 hidden">
+        <div class="bg-white rounded-lg shadow-lg p-6 text-center" style="max-width: 400px;">
+            <h2 class="text-2xl font-bold text-[#002d6e] mb-4">Logged Out</h2>
+            <p id="alertMessage" class="text-lg text-[#002d6e]"></p>
+            <button onclick="closeAlert()" class="mt-4 bg-[#ff8000] text-white px-4 py-2 rounded-lg hover:bg-[#cc6600]">
+                OK
+            </button>
+        </div>
+    </div>
+
+    <script>
+        const carousel = document.querySelector('.carousel');
+        let currentIndex = 0;
+
+        function nextSlide() {
+            if (currentIndex < carousel.children.length - 1) {
+                currentIndex++;
+                carousel.scrollTo({
+                    left: carousel.clientWidth * currentIndex,
+                    behavior: 'smooth'
+                });
+            }
+        }
+
+        function prevSlide() {
+            if (currentIndex > 0) {
+                currentIndex--;
+                carousel.scrollTo({
+                    left: carousel.clientWidth * currentIndex,
+                    behavior: 'smooth'
+                });
+            }
+        }
+        //Handle Logout Function
+        function handleLogout() {
+            fetch('/logout', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.message) {
+                    document.getElementById('alertMessage').textContent = data.message;
+                    document.getElementById('customAlert').classList.remove('hidden');
+                }
+            })
+            .catch(error => console.error('Error:', error));
+        }
+
+        // Close Alert Box
+        function closeAlert() {
+            document.getElementById('customAlert').classList.add('hidden');
+            window.location.href = '/loginSignUP';
+        }
+
+ 
+
+    </script>
+
+
+</body>
+
+
+<!-- HERO 1-->
+
+</html>

@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile</title>
+    <link rel="stylesheet" href="../css/userProfile.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/js/all.min.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body>
+<!-- Navbar -->
+<header class="bg-[#002d6e] text-white py-4 shadow-lg fade-in">
+    <div class="container mx-auto flex justify-between items-center px-10">
+        <nav class="flex space-x-6">
+            <a href="/" class="nav-link">Home</a>
+            <a href="/services" class="nav-link">Services</a>
+            <a href="/contact" class="nav-link">Contact</a>
+        </nav>
+        <a href="/UserCart" class="text-white text-xl hover:text-[#ff8000] transition px-4"><i class="fas fa-shopping-cart"></i></a>
+    </div>
+</header>
+    <!-- Logo at the top center -->
+    <div class="logo-container">
+        <img src="../imageAssets/Screenshot 2025-01-12 103506.png" alt="Logo" class="logo">
+    </div>
+
+    <!-- Profile Box -->
+    <div class="profile-box">
+        <h2>User Profile</h2>
+        <div class="profile-info">
+            <p><strong>User ID:</strong> <span id="userId"></span></p>
+            <p><strong>Name:</strong> <span id="userName"></span></p>
+            <p><strong>Email:</strong> <span id="userEmail"></span></p>
+        </div>
+
+        <!-- My Order Button -->
+        <button class="order-btn" onclick="window.location.href= '/userOrderHistory'">My Order</button>
+    </div>
+
+    <script src="../js/userProfile.js"></script>
+
+</body>
+</html>
